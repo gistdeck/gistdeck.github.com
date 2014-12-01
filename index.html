@@ -390,26 +390,21 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
     </textarea>
     <script src="//gnab.github.io/remark/downloads/remark-latest.min.js">
     </script>
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script>
      var path = '/jcouyang/8acfc555a718d62b77b2';//window.location.pathname;
-     var gistid = path.split('/').pop()
-     if(gistid){
-       var xhr = new XMLHttpRequest();
-       xhr.onload = function(e) {
-         var gist = xhr.response; 
-         var markdown = ""
-         for(var filename in gist.files){
-           markdown += gist.files[filename].content
-         }
-         document.querySelector("#source").innerHTML = markdown;
-       }
-       xhr.open("GET", 'https://gist.github.com.ru/jcouyang/a17746e54b0d480d7fb5?path=' + path, true);
-       xhr.responseType = "json";
-       xhr.send();
+     if(path.split('/').length>2){
+       $.getJSON('https://gist.github.com.ru/jcouyang/a17746e54b0d480d7fb5?path=' + path + "&callback=?", function(data){
+         $('#source').html(data.result)
+         remark.create({
+           highlightStyle: 'monokai'
+         });
+       });
+     }else{
+       remark.create({
+         highlightStyle: 'monokai'
+       });
      }
-     var slideshow = remark.create({
-     highlightStyle: 'monokai'
-});
     </script>
   </body>
 </html>
