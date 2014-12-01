@@ -390,12 +390,12 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
     </textarea>
     <script src="//gnab.github.io/remark/downloads/remark-latest.min.js">
     </script>
-    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
     <script>
      var path = window.location.pathname;
      if(path.split('/').length>2){
-       $.getJSON('http://gist.github.com.ru/jcouyang/a17746e54b0d480d7fb5?path=' + path + "&callback=?", function(data){
-         $('#source').html(data.result)
+       $.get('https://gist.githubusercontent.com/' + path + "/raw", function(data){
+         $('#source').html(data)
          remark.create({
            highlightStyle: 'monokai'
          });
