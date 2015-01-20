@@ -309,6 +309,17 @@ end
 ]
 ---
 .left-column[
+## Markdown extensions
+### - Slide properties
+### - Content classes
+### - Syntax Highlighting
+### - MathJax
+]
+.right-column[
+`$$\int_\Omega \nabla v \cdot \nabla u - \lambda v u ~dV = \int_\Omega v f ~dV$$`
+]
+---
+.left-column[
 ## Presenter mode
 ]
 .right-column[
@@ -388,9 +399,11 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
 
       
     </textarea>
+    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
     <script src="//gnab.github.io/remark/downloads/remark-latest.min.js">
     </script>
-    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured">
+    </script>
     <script>
      var path = window.location.pathname;
      if(path.split('/').length>2){
@@ -405,6 +418,14 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
          highlightStyle: 'monokai'
        });
      }
+     MathJax.Hub.Config({
+       tex2jax: {
+         skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+         inlineMath: [['$','$'], ['\\(','\\)']]
+       }
+     });
+     MathJax.Hub.Configured();
+
     </script>
     <script>
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
