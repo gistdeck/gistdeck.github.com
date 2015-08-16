@@ -123,278 +123,134 @@ name: inverse
 layout: true
 class: center, middle, inverse
 ---
-#[Gist => Deck](https://github.com/gistdeck/gistdeck.github.com)
-.footnote[powered by [remark.js](https://github.com/gnab/remark)]
+# 理解原型链和继承
+.footnote[http://blog.oyanglul.us/javascript/understand-prototype.html]
 ---
-## What is it and why should I be using it?
+## instanceof 引发的问题
+
+```js
+Function instanceof Object;
+Object instanceof Function;
+```
+---
+## instanceof 运算符可以用来
+
+## 判断某个构造函数的prototype属性
+
+## 是否存在另外一个要检测对象的原型链上
+.footnote[[mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof)]
 ---
 layout: false
-.left-column[
-## What is remark?
-]
-.right-column[
-A simple, in-browser, Markdown-driven slideshow tool
-- Markdown formatting, with smart extensions
-- Presenter mode, with cloned slideshow view
-- Syntax highlighting, supporting a range of languages
-- Slide scaling, thus similar appearance on all devices / resolutions .red[*]
-- Touch support for smart phones and pads, i.e. swipe to navigate slides
-.footnote[.red[*] At least browsers try their best]
-]
----
-.left-column[
-## What is remark?
-## What is gistdeck?
-]
-.right-column[
-gistdeck let you host your remark source code in gist, and instantantly render in to remark slide, which means:
-- you don't have to find place to host your slides
-- you got version control of your slide source
-- you can even analytics your slide by using [ga-beacon](https://github.com/igrigorik/ga-beacon)
-]
----
-.left-column[
-## What is remark?
-## What is gistdeck?
-## Why use it?
-]
-.right-column[
-If your ideal slideshow creation workflow contains any of the following steps:
-- Just write what's on your mind
-- Do some basic styling
-- Easily collaborate with others
-- Share with and show to everyone
-Then remark might be perfect for your next.red[*] slideshow!
-.footnote[.red[*] You probably want to convert existing slideshows as well]
-]
----
-template: inverse
-## How does it work, then?
----
-name: how
-.left-column[
-## How does it work?
-### - Markdown
-]
-.right-column[
-A Markdown-formatted chunk of text is transformed into individual slides by JavaScript running in the browser:
-```remark
-# Slide 1
-This is slide 1
----
-# Slide 2
-This is slide 2
+##  请问斜体字的这俩到底是什么鬼意思
+```javascript
+Function instanceof Object;
 ```
-.slides[
-.first[
-### Slide 1
-This is slide 1
-]
-.second[
-### Slide 2
-This is slide 2
-]
-]
-Regular Markdown rules apply with only a single exception:
-- A line containing three dashes constitutes a new slide
-(not a horizontal rule, `&lt;hr /&gt;`)
-Have a look at the [Markdown website](http://daringfireball.net/projects/markdown/) if you're not familiar with Markdown formatting.
-]
----
-.left-column[
-## How does it work?
-### - Markdown
-### - Inside HTML
-]
-.right-column[
-A simple HTML document is needed for hosting the styles, Markdown and the generated slides themselves:
-```xml
-<!DOCTYPE html>
-<html>
-<head>
-<style type="text/css">
-/* Slideshow styles */
-</style>
-</head>
-<body>
-* <textarea id="source">
-<!-- Slideshow Markdown -->
-&lt;/textarea&gt;
-* <script type="text/javascript" src="remark.js">
-</script>
-<script type="text/javascript">
-* var slideshow = remark.create();
-</script>
-</body>
-</html>
-```
-You may download remark to have your slideshow not depend on any online resources, or reference the [latest version](http://remarkjs.com/downloads/remark-latest.min.js) online directly.
-]
----
-template: inverse
-## Of course, Markdown can only go so far.
----
-.left-column[
-## Markdown extensions
-]
-.right-column[
-To help out with slide layout and formatting, a few Markdown extensions have been included:
-- Slide properties, for naming, styling and templating slides
-- Content classes, for styling specific content
-- Syntax highlighting, supporting a range of languages
-]
----
-.left-column[
-## Markdown extensions
-### - Slide properties
-]
-.right-column[
-Initial lines containing key-value pairs are extracted as slide properties:
-```remark
-name: agenda
-class: middle, center
-# Agenda
-The name of this slide is {{ name }}.
-```
-Slide properties serve multiple purposes:
-* Naming and styling slides using properties `name` and `class`
-* Using slides as templates using properties `template` and `layout`
-* Expansion of `{{ property }}` expressions to property values
-See the [complete list](https://github.com/gnab/remark/wiki/Markdown#slide-properties) of slide properties.
-]
----
-.left-column[
-## Markdown extensions
-### - Slide properties
-### - Content classes
-]
-.right-column[
-Any occurences of one or more dotted CSS class names followed by square brackets are replaced with the contents of the brackets with the specified classes applied:
-```remark
-.footnote[.red.bold[*] Important footnote]
-```
-Resulting HTML extract:
-```xml
-<span class="footnote">
-<span class="red bold">*</span> Important footnote
-</span>
-```
-]
----
-.left-column[
-## Markdown extensions
-### - Slide properties
-### - Content classes
-### - Syntax Highlighting
-]
-.right-column[
-Code blocks can be syntax highlighted by specifying a language from the set of [supported languages](https://github.com/gnab/remark/wiki/Configuration#highlighting).
-Using [GFM](http://github.github.com/github-flavored-markdown/) fenced code blocks you can easily specify highlighting language
 
-A number of highlighting [styles](https://github.com/gnab/remark/wiki/Configuration#highlighting) are available, including several well-known themes from different editors and IDEs.
-.pull-left[
-<pre><code>```javascript
-function add(a, b){
-return a + b
+把x,y代入公式得：
+
+> instanceof 运算符可以用来判断Object的 *prototype属性* 是否存在Function的 *原型链* 上。
+
+---
+## Class
+比如ruby：
+```ruby
+  class A
+    def initialize name
+      @name = name
+    end
+    def to_s
+      @name
+    end
+  end
+puts A.new('hehe') # => hehe
+```
+创建一个class模板，然后用class模板创建object实例
+---
+## JS 没有 class，所以要这样这样
+```javascript
+function A(name){
+  this.name = name
 }
-```</code></pre>
-]
-.pull-right[
-<pre><code>``````ruby
-def add(a, b)
-a + b
-end
-```</code></pre>
-]
-]
----
-.left-column[
-## Markdown extensions
-### - Slide properties
-### - Content classes
-### - Syntax Highlighting
-### - MathJax
-]
-.right-column[
-`$$\int_\Omega \nabla v \cdot \nabla u - \lambda v u ~dV = \int_\Omega v f ~dV$$`
-]
----
-.left-column[
-## Presenter mode
-]
-.right-column[
-To help out with giving presentations, a presenter mode comprising the
-following features is provided:
-- Display of slide notes for the current slide, to help you remember
-key points
-- Display of upcoming slide, to let you know what's coming
-- Cloning of slideshow for viewing on extended display
-]
----
-.left-column[
-## Presenter mode
-### - Inline notes
-]
-.right-column[
-Just like three dashes separate slides,
-three question marks separate slide content from slide notes:
-```markdown
-Slide 1 content
-*???
-Slide 1 notes
----
-Slide 2 content
-*???
-Slide 2 notes
+A.prototype.toString = function(){
+  return this.name
+}
+var a = new A('hehe')
+console.log('object name is:' + new A ('hehe'))
+// => object name is: hehe
 ```
-Slide notes are also treated as Markdown, and will be converted in the
-same manner slide content is.
-Pressing __P__ will toggle presenter mode.
-]
-???
-Congratulations, you just toggled presenter mode!
-Now press __P__ to toggle it back off.
 ---
-.left-column[
-## Presenter mode
-### - Inline notes
-### - Cloned view
-]
-.right-column[
-Presenter mode of course makes no sense to the audience.
-Creating a cloned view of your slideshow lets you:
-- Move the cloned view to the extended display visible to the audience
-- Put the original slideshow in presenter mode
-- Navigate as usual, and the cloned view will automatically keep up with the original
-Pressing __C__ will open a cloned view of the current slideshow in a new
-browser window.
-]
+## 为什么要把方法绑到prototype上？直接 A.toString… 不行吗
+```js
+// var a = new A('hehe') =>
+var a = new Object();
+a.__proto__ = A.prototype; (proto)
+A.call(a, 'hehe');
+```
+---
+## __proto__ 又是什么
+__proto__ 是内部 `[[Prototype ]]` （说了半天原型链这就是牛逼闪闪的 **原型链**, 指向对象或者null）的getter和setter方法（已加入ES6规范3，但是还是建议只使用Object.getPrototypeOf()）
+
+JS对象能使用它原型链对象的所有方法
+
+比如我之前覆盖掉的 toString 本身就是Object.prototype上的方法
+```javascript
+a.toString === A.prototype.toString // true
+a.toLocalString === Object.prototype.toLocalString // true
+a.__proto__ === A.prototype // true
+```
+---
+##  所以回头看看 instanceof
+> instanceof 运算符可以用来判断Object的 prototype属性 是否存在Function的 原型链 上。
+
+是否可以写成
+```javascript
+Function.__proto__ === Object.prototype
+```
+---
+##  真的吗？
+```javascript
+Function.__proto__ === Object.prototype
+//=> false
+```
 ---
 template: inverse
-## It's time to get started!
+##  那 `Function.__proto__`  到底指向谁？
 ---
-.left-column[
-## Getting started
-]
-.right-column[
-Getting up and running is done in only a few steps:
-1. Go to your gist and write some markdown.
-2. put a "deck" right after "gist" in url like this:
+layout: false
+## 那就意味着…
+```js
+Function instanceof Function
+//true
 ```
-              deck
-                v
-https://gist.github.com/jcouyang/8acfc555a718d62b77b2
-                |
-                V
-https://gistdeck.github.com/jcouyang/8acfc555a718d62b77b2
+yes，然而 Function instanceof Object似乎也能解释了
+
+```js
+Function.__proto__ === Function.prototype
+Function.__proto__.__proto__ === Object.prototype
 ```
-3. enjoy the slide remark generated.
-For more information on using remark, please check out the [wiki](https://github.com/gnab/remark/wiki) pages.
-]
+所以如果我们让
+
+```js
+Function.__proto__.__proto__ = null
+Function instanceof Object
+//false
+```
+这回知道为什么不要用 `__proto__` 了吧，一不小心重写了会导致所有继承自它的对象都受影响。 
 ---
-name: last-page
-template: inverse
-## That's all folks (for now)!
+## 下来看第二个题
+```js
+Object instanceof Function
+```
+ 要晕了吧
+---
+## 忍不住画个图
+<img src="https://www.evernote.com/l/ABerZUl8ytRL1KHVx1JSFhIgl6a-dZwdZBMB/image.png" height=500 width=700/>
+
+---
+## contructor
+![](https://www.evernote.com/l/ABextuBjPu5MiqwpfrE1NUlZ28bhdc42qawB/image.png)
+---
+## That's all!
 Slideshow created using [remark](http://github.com/gnab/remark) and host on [gistdeck](https://gistdeck.github.com).
 
 
@@ -589,7 +445,7 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
     <script>
      var path = window.location.pathname;
      if(path.split('/').length>2){
-       $.get('https://gist.githubusercontent.com/' + path + "/raw", function(data){
+       $.get('https://gist.githubusercontent.com' + path + "/raw", function(data){
          $('#source').html(data)
          remark.create();
          readLinks();
