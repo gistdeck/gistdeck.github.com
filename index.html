@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>GistDeck</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <style type="text/css">
-      @import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      @import url(//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
-      @import url(//fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+    <meta charset="utf-8" />
+    <meta name="keywords" content="remark,remarkjs,markdown,slideshow,presentation" />
+    <meta name="description" content="A simple, in-browser, markdown-driven slideshow tool." />
+    <title>Remark</title>
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
-      body { font-family: 'Droid Serif'; }
+      body {
+        font-family: 'Droid Serif';
+      }
       h1, h2, h3 {
         font-family: 'Yanone Kaffeesatz';
-        font-weight: normal;
+        font-weight: 400;
+        margin-bottom: 0;
       }
       .remark-slide-content h1 { font-size: 3em; }
       .remark-slide-content h2 { font-size: 2em; }
@@ -28,8 +33,6 @@
         text-decoration: none;
       }
       code {
-        -moz-border-radius: 5px;
-        -web-border-radius: 5px;
         background: #e7e8e2;
         border-radius: 5px;
       }
@@ -113,12 +116,10 @@
         float: right;
         padding-top: 1em;
       }
-
     </style>
   </head>
   <body>
     <textarea id="source">
-
 name: inverse
 layout: true
 class: center, middle, inverse
@@ -400,204 +401,31 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
 
     </textarea>
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
-    <script src="//gnab.github.io/remark/downloads/remark-latest.min.js">
-    </script>
-    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured">
-    </script>
+    <script src="//gnab.github.io/remark/downloads/remark-latest.min.js"></script>
     <script>
-      function getQuery(querystring) {
-        var query = {};
-
-        var pairs = querystring.split('&'),
-            length = pairs.length,
-            keyval = [],
-            i = 0;
-
-        for (; i < length; i++) {
-          keyval = pairs[i].split('=', 2);
-          try {
-            keyval[0] = decodeURIComponent(keyval[0]); // key
-            keyval[1] = decodeURIComponent(keyval[1]); // value
-          } catch (e) {}
-
-          if (query[keyval[0]] === undefined) {
-            query[keyval[0]] = keyval[1];
-          } else {
-            query[keyval[0]] += ',' + keyval[1];
-          }
-        }
-
-        return query;
-      }
-      var innerText = document.createElement('i').innerText === undefined ? 'textContent' : 'innerText';
-
-      // 1. find all links with class=jsbin
-      function getLinks() {
-        var links = [], alllinks, i = 0, length;
-        alllinks = document.getElementsByTagName('a');
-        length = alllinks.length;
-        for (; i < length; i++) {
-          if ((' ' + alllinks[i].className).indexOf(' jsbin-') !== -1) {
-            links.push(alllinks[i]);
-          }
-        }
-
-        return links;
-      }
-
-      function findCodeInParent(element) {
-        var match = element;
-
-        while (match = match.previousSibling) {
-          if (match.nodeName === 'PRE') {
-            break;
-          }
-          if (match.getElementsByTagName) {
-            match = match.getElementsByTagName('pre');
-            if (match.length) {
-              match = match[0]; // only grabs the first
-              break;
-            }
-          }
-        }
-
-        if (match) return match;
-
-        match = element.parentNode.getElementsByTagName('pre');
-
-        if (!match.length) {
-          if (element.parentNode) {
-            return findCodeInParent(element.parentNode);
-          } else {
-            return null;
-          }
-        }
-
-        return match[0];
-      }
-
-      function findCode(link) {
-        var rel = link.rel,
-            query = link.search.substring(1),
-            element,
-            code,
-            panels = [];
-
-        if (rel && (element = document.getElementById(rel.substring(1)))) {
-          code = element[innerText];
-          // else - try to support multiple targets for each panel...
-          // } else if (query.indexOf('=') !== -1) {
-          //   // assumes one of the panels points to an ID
-          //   query.replace(/([^,=]*)=([^,=]*)/g, function (all, key, value) {
-          //     code = document.getElementById(value.substring(1))[innerText];
-
-          //   });
-        } else {
-          // go looking through it's parents
-          element = findCodeInParent(link);
-          if (element) {
-            code = element[innerText];
-          }
-        }
-
-        return code;
-      }
-
-      function detectLanguage(code) {
-        var htmlcount = (code.split("<").length - 1),
-            csscount = (code.split("{").length - 1),
-            jscount = (code.split(".").length - 1);
-
-        if (htmlcount > csscount && htmlcount > jscount) {
-          return 'html';
-        } else if (csscount > htmlcount && csscount > jscount) {
-          return 'css';
-        } else {
-          return 'javascript';
-        }
-      }
-
-      function scoop(link) {
-        var code = findCode(link),
-            language = detectLanguage(code),
-            query = link.search.substring(1);
-
-        if (language === 'html' && code.toLowerCase().indexOf('<html') === -1) {
-          // assume this is an HTML fragment - so try to insert in the %code% position
-          language = 'code';
-        }
-
-        if (query.indexOf(language) === -1) {
-          query += ',' + language + '=' + encodeURIComponent(code);
-        } else {
-          query = query.replace(language, language + '=' + encodeURIComponent(code));
-        }
-
-        link.search = '?' + query;
-      }
-
-      function embed(link) {
-        var iframe = document.createElement('iframe'),
-            resize = document.createElement('div'),
-            url = link.href.replace(/edit/, 'embed');
-        iframe.src = url.split('&')[0];
-        iframe._src = url.split('&')[0]; // support for google slide embed
-        iframe.className = link.className; // inherit all the classes from the link
-        iframe.id = link.id; // also inherit, giving more style control to the user
-        iframe.style.border = '1px solid #aaa';
-
-        var query = getQuery(link.search);
-        iframe.style.width = query.width || '100%';
-        iframe.style.minHeight = query.height || '300px';
-        if (query.height) {
-          iframe.style.maxHeight = query.height;
-        }
-        link.parentNode.replaceChild(iframe, link);
-
-        var onmessage = function (event) {
-          event || (event = window.event);
-          // * 1 to coerse to number, and + 2 to compensate for border
-          iframe.style.height = (event.data.height * 1 + 2) + 'px';
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark.language.js"></script>
+    <script>
+      var remarkConfig = {
+          highlightStyle: 'monokai',
+          highlightLanguage: 'remark',
+          highlightLines: true
         };
-
-        if (window.addEventListener) {
-          window.addEventListener('message', onmessage, false);
-        } else {
-          window.attachEvent('onmessage', onmessage);
-        }
-      }
-
-      function readLinks() {
-        var links = getLinks(),
-            i = 0,
-            length = links.length,
-            className = '';
-
-        for (; i < length; i++) {
-          className = ' ' + links[i].className + ' ';
-          if (className.indexOf(' jsbin-scoop ') !== -1) {
-            scoop(links[i]);
-          } else if (className.indexOf(' jsbin-embed ') !== -1) {
-            console.log('embed', links[i]);
-            links[i].className = links[i].className.replace(/jsbin\-embed/, '');
-            embed(links[i]);
-          }
-        }
-
-      }
     </script>
     <script>
      var path = window.location.pathname;
      if(path.split('/').length>2){
        $.get('https://gist.githubusercontent.com' + path + "/raw", function(data){
          $('#source').html(data)
-         remark.create();
-         readLinks();
+         remark.create(remarkConfig);
        });
      }else{
-       remark.create();
-       readLinks();
+       remark.create(remarkConfig);
      }
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured"></script>
+    <script>
      MathJax.Hub.Config({
        tex2jax: {
          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
