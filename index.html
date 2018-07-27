@@ -402,7 +402,6 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
 <div id="danmaku-comments"></div>
 
 </textarea>
-    <script id="gulugulu-script" src="https://oyanglul.us/gulugulu/public/main.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
     <script>
@@ -417,15 +416,17 @@ Slideshow created using [remark](http://github.com/gnab/remark) and host on [gis
         };
     </script>
     <script>
-     var path = window.location.pathname;
-     if(path.split('/').length>2){
-       $.get('https://gist.githubusercontent.com' + path + "/raw", function(data){
-         $('#source').html(data)
-         remark.create(remarkConfig);
-       });
-     }else{
-       remark.create(remarkConfig);
-     }
+      var path = window.location.pathname;
+      if(path.split('/').length>2){
+        $.get('https://gist.githubusercontent.com' + path + "/raw", function(data){
+          $('#source').html(data)
+          remark.create(remarkConfig);
+          $.getScript('https://oyanglul.us/gulugulu/public/main.min.js')
+        });
+      }else{
+        remark.create(remarkConfig);
+        $.getScript('https://oyanglul.us/gulugulu/public/main.min.js')
+      }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured"></script>
     <script>
